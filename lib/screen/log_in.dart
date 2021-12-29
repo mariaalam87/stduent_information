@@ -59,6 +59,7 @@ class _LogInState extends State<LogIn> {
             height: 15,
           ),
           Row(
+
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("Don't have an account? ",
