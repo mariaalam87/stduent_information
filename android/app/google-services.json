@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "16907093232",
+    "project_id": "batch-a-firebase",
+    "storage_bucket": "batch-a-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16907093232:android:97e168444bd66eaedfae35",
+        "android_client_info": {
+          "package_name": "com.example.batch_a_29_dec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "16907093232-mp3f4mn4ivf5o17vbfp3gn5uj4c7bs22.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOhIYc-I1-sEymv9agc8O3pw44VL5ycjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "16907093232-mp3f4mn4ivf5o17vbfp3gn5uj4c7bs22.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -16,8 +16,9 @@ class CustomTextField extends StatefulWidget {
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
 }
-AllColor allColor= AllColor();
 
+AllColor allColor= AllColor();
+String passStore="";
 class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
@@ -25,6 +26,29 @@ class _CustomTextFieldState extends State<CustomTextField> {
       padding: const EdgeInsets.only(left: 28.0
           ,right: 28),
       child: TextFormField(
+        validator: (value){
+          bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+              .hasMatch(value!);
+          if(value.isEmpty){
+            return "This field can not be empty!";
+          }
+          if(widget.labelText=="Email"){
+            if(!emailValid)
+              return "Email format is not correct!";
+          }
+          if(widget.labelText=="Password")
+            {
+              passStore=value;
+              if(value.length<6)
+                return "Password must be atleast 6 char!";
+            }
+          if(widget.labelText=="Confirm Password"){
+            if(passStore!=value){
+              return "Password didn't match!";
+            }
+          }
+        },
+
         obscureText: widget.obsecureVal,
         controller: widget.controller,
         cursorColor: allColor.appColor,
