@@ -12,12 +12,13 @@ class LogIn extends StatefulWidget {
   @override
   _LogInState createState() => _LogInState();
 }
- GlobalKey<FormState> _formKey=GlobalKey();
+
 AllColor allColor= AllColor();
 final _auth = FirebaseAuth.instance;
 TextEditingController _emailController=TextEditingController();
 TextEditingController _passController=TextEditingController();
 class _LogInState extends State<LogIn> {
+  final _formKey=GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +57,8 @@ class _LogInState extends State<LogIn> {
                 signIn(
                   _emailController.text,
                     _passController.text,
-                    context
+                    context,
+                  _formKey
                 );
               },
               child: CustomButton(
@@ -92,7 +94,8 @@ class _LogInState extends State<LogIn> {
     );
   }
 }
-void signIn(String email, String pass, context) async{
+void signIn(String email, String pass,
+    context, _formKey) async{
   if(_formKey.currentState!.validate())
   {
     
