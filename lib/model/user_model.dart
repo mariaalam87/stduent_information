@@ -4,9 +4,12 @@ class UserModel{
   String? age;
   String? email;
   String? uid;
+  String? dept;
+  String? bloodGroup;
 
   UserModel({this.name, this.phone,
-      this.age, this.email, this.uid});
+      this.age, this.email, this.uid,
+    this.dept,this.bloodGroup});
 
   factory UserModel.fromMap(map){
     return UserModel(
@@ -14,7 +17,9 @@ class UserModel{
         phone: map['phone'],
         age: map['age'],
         email: map['email'],
-        uid: map['uid']
+        uid: map['uid'],
+        dept: map['dept'],
+        bloodGroup: map['bloodGroup'],
     );
   }
 
@@ -25,6 +30,8 @@ class UserModel{
       'email': email,
       'phone':phone,
       'age':age,
+      'dept':dept,
+      'bloodGroup':bloodGroup,
     };
   }
 

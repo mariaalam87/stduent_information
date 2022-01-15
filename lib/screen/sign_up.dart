@@ -1,18 +1,45 @@
+import 'dart:io';
+
+import 'package:alert_dialog/alert_dialog.dart';
 import 'package:batch_a_29_dec/helper/custom_button.dart';
 import 'package:batch_a_29_dec/helper/custom_text_field.dart';
 import 'package:batch_a_29_dec/model/user_model.dart';
 import 'package:batch_a_29_dec/screen/log_in.dart';
+import 'package:batch_a_29_dec/screen/verify_email.dart';
 import 'package:batch_a_29_dec/utills/all_color.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
   @override
   _SignUpState createState() => _SignUpState();
 }
+
+List<String> deptList=[
+  "App Development",
+  "Graphics Design",
+  "RAC",
+  "Electrics",
+  "Electrical"
+];
+List<String>bloodGroupList=[
+  "A+",
+  "A-",
+  "B+",
+  "B-",
+  "AB+",
+  "AB-",
+  "O+",
+  "O-"
+];
+
+String ? initValDept;
+String ? initValBloodGroup;
 final _auth= FirebaseAuth.instance;
 AllColor allColor= AllColor();
 TextEditingController _emailController=TextEditingController();
@@ -21,9 +48,18 @@ TextEditingController _confirmPassController=TextEditingController();
 TextEditingController _ageController=TextEditingController();
 TextEditingController _phoneController=TextEditingController();
 TextEditingController _nameController=TextEditingController();
-
+File? image;
 class _SignUpState extends State<SignUp> {
  final _formKeySignUp= GlobalKey<FormState>();
+ Future pickImageFromGallery( source) async{
+   final image2= await ImagePicker().pickImage(
+       source: source);
+   if(image2==null) return;
+   final tempImage= File(image2.path);
+   setState(() {
+     image= tempImage;
+   });
+ }
 
   @override
   Widget build(BuildContext context) {
@@ -34,16 +70,79 @@ class _SignUpState extends State<SignUp> {
           child: Column(
             children: [
               SizedBox(
-                height: 80,
+                height: 40,
               ),
-              Icon(Icons.star,
-                size: 80,color: allColor.appColor,),
+              InkWell(
+                onTap: (){
+                  alert(
+                    context,
+                  //  title: Text('Alert'),
+                    content: Text('Select One'),
+                    textOK: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          InkWell(
+                              onTap: (){
+                                pickImageFromGallery(ImageSource.camera);
+                                Navigator.of(context).pop();
+                                },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text('Take from Camera',
+                                style: TextStyle(
+                                  fontSize: 20
+                                ),
+                                ),
+                              )),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          InkWell(
+                            onTap:(){
+                              pickImageFromGallery(ImageSource.gallery);
+                              Navigator.of(context).pop();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text('Take from Gallery',
+                                  style: TextStyle(
+                                      fontSize: 20
+                                  ),),
+                              )),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                child: ClipOval(
+                  child:
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.deepOrange
+                          ),
+                          borderRadius: BorderRadius.circular(180)
+                        ),
+                        height: 130,
+                          width: 130,
+                          child: image!= null?
+                          Image.file(image!,
+                            fit: BoxFit.cover,):
+                          Icon(Icons.camera_alt,
+                            size: 40,),
+                      ),
+
+                ),
+              ),
+
               SizedBox(
                 height: 20,
               ),
               CustomTextField(
                 hintText: "Enter your full-name",
-                labelText: "Name",
+                labelText: "Full-Name",
                 controller: _nameController ,
                 obsecureVal: false,
               ),
@@ -52,12 +151,96 @@ class _SignUpState extends State<SignUp> {
               ),
               CustomTextField(
                 hintText: "Enter your phone number",
-                labelText: "Phone",
+                labelText: "Phone Number",
                 controller: _phoneController ,
                 obsecureVal: false,
               ),
               SizedBox(
                 height: 20,
+                child: Divider(
+
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 55,
+                    width: 153,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Colors.grey
+                        ),
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 0.0,
+                          right: 0,bottom: 8,top: 8),
+                      child: DropdownButton(
+                        iconDisabledColor: Colors.deepOrange,
+                        iconEnabledColor: Colors.deepOrange,
+                        hint: Text("Department",
+                          style: TextStyle(color: Colors.deepOrange,),),
+                        items: deptList.map(
+                                (val) => DropdownMenuItem(
+                                value: val,
+                                child: Text(val,
+                                  style: TextStyle(color: Colors.deepOrange),
+                                )
+                            )
+                        ).toList(),
+
+                        onChanged: (newVal){
+                          setState(() {
+                            initValDept=newVal.toString();
+                          });
+                        },
+                        value: initValDept,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 55,
+                    width: 153,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey
+                      ),
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 0.0,
+                          right: 0,bottom: 8,top: 8),
+                      child: DropdownButton(
+                        iconDisabledColor: Colors.deepOrange,
+                        iconEnabledColor: Colors.deepOrange,
+                        hint: Text("Blood Group",
+                          style: TextStyle(color: Colors.deepOrange),),
+                        items: bloodGroupList.map(
+                                (val) => DropdownMenuItem(
+                                value: val,
+                                child: Text(val,
+                                    style: TextStyle(color: Colors.deepOrange),
+                                )
+                            )
+                        ).toList(),
+
+                        onChanged: (newVal){
+                          setState(() {
+                            initValBloodGroup=newVal.toString();
+                          });
+                        },
+                        value: initValBloodGroup,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+                child: Divider(
+
+                ),
               ),
               CustomTextField(
                 hintText: "Enter your Age",
@@ -126,9 +309,13 @@ void signUp(String email, String password,
       (email: email, password: password)
         .then((value) => {
           saveUserDetails(),
+          saveImage(),
           Fluttertoast.showToast(msg: "SignUp Successful!"),
       Navigator.push(context,
-          MaterialPageRoute(builder: (context)=>LogIn()))
+          MaterialPageRoute(
+              builder: (context)=>VerifyEmailPage(
+                email: _emailController.text
+              )))
     }).catchError((e){
       Fluttertoast.showToast(msg:e.message);
 
@@ -136,7 +323,14 @@ void signUp(String email, String password,
   }
 
 }
-
+void saveImage()async{
+  User? _user= FirebaseAuth.instance.currentUser;
+  if(image==null) return;
+  final destination= _user!.uid.toString();
+  final ref= FirebaseStorage.instance
+      .ref(destination);
+  ref.putFile(image!);
+}
 void saveUserDetails() async{
   FirebaseFirestore firestore123=
       FirebaseFirestore.instance;
@@ -148,8 +342,12 @@ void saveUserDetails() async{
   userModel.phone= _phoneController.text;
   userModel.age= _ageController.text;
   userModel.name= _nameController.text;
-  
-  await firestore123.collection("users")
+  userModel.dept= initValDept;
+  userModel.bloodGroup= initValBloodGroup;
+
+  await firestore123.collection("users").
+  doc(initValDept)
+  .collection('allStd')
   .doc(user.uid)
   .set(userModel.toMap());
   Fluttertoast.showToast(msg: "Data Saved Successfully");

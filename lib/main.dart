@@ -1,4 +1,7 @@
+import 'package:batch_a_29_dec/screen/home_page.dart';
 import 'package:batch_a_29_dec/screen/log_in.dart';
+import 'package:batch_a_29_dec/screen/user_profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +17,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LogIn(),
+      home:
+          FirebaseAuth.instance.currentUser==null?
+      LogIn():
+      HomePage(),
     );
   }
 }

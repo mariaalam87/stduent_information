@@ -2,6 +2,7 @@ import 'package:batch_a_29_dec/helper/custom_button.dart';
 import 'package:batch_a_29_dec/helper/custom_text_field.dart';
 import 'package:batch_a_29_dec/screen/home_page.dart';
 import 'package:batch_a_29_dec/screen/sign_up.dart';
+import 'package:batch_a_29_dec/screen/user_profile.dart';
 import 'package:batch_a_29_dec/utills/all_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +105,7 @@ void signIn(String email, String pass,
             (value) =>
     {
       Fluttertoast.showToast(msg: "Login Successful!!"),
-      Navigator.push(context,MaterialPageRoute
+      Navigator.pushReplacement(context,MaterialPageRoute
         (builder: (context)=>HomePage())),
     }
     ).catchError((e){
