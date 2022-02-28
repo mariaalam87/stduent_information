@@ -1,4 +1,4 @@
-# batch_a_29_dec
+# students_info
 
 A new Flutter project.
 
